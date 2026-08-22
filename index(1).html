@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BERKAY LAK — OUTER HEAVEN</title>
+<meta name="description" content="Personal portfolio and blog by Your Name — projects, videos, and updates.">
+<meta property="og:title" content="Your Name — Personal Heaven">
+<meta property="og:description" content="Personal portfolio and blog — projects, videos, and updates.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  /* ===========================================================
+     TOKEN SYSTEM
+     --void      : main background, near-black w/ green undertone
+     --void-2    : secondary/panel background
+     --chrome-1  : light chrome text
+     --chrome-2  : dim chrome / shadow text
+     --neon      : primary neon green (the whole vibe)
+     --neon-dim  : darker green for borders/shadows
+     --neon-glow : glow color for box-shadows/text-shadows
+     --coolchrome: cold blue-chrome highlight, used sparingly
+     =========================================================== */
+  :root{
+    --void: #05080600;
+    --void-bg: #060a07;
+    --void-2: #0c130e;
+    --void-3: #101a13;
+    --chrome-1: #e6efe8;
+    --chrome-2: #7d9187;
+    --neon: #8CFF3A;
+    --neon-dim: #2f5c17;
+    --neon-glow: rgba(140,255,58,0.55);
+    --coolchrome: #9db8ff;
+    --white-hot: #eafcef;
+    --steel-hi: #f3f7f8;
+    --steel-mid: #98a7ac;
+    --steel-low: #4a565b;
+    --steel-dark: #1c2225;
+    --lcd-bg: #02150c;
+    --font-display: 'Orbitron', sans-serif;
+    --font-body: 'Rajdhani', sans-serif;
+    --font-mono: 'Share Tech Mono', monospace;
+  }
+
+  /* ---------- reusable chrome bezel screw (corner bolt detail) ---------- */
+  .screw{
+    width:9px; height:9px; border-radius:50%; position:absolute; z-index:3;
+    background: radial-gradient(circle at 35% 30%, #f5f8f9, #9aa7ac 55%, #333 100%);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.7), inset 0 0 1px rgba(0,0,0,0.5);
+  }
+  .screw::after{
+    content:''; position:absolute; top:50%; left:12%; right:12%; height:1px;
+    background:#2a2f31; transform:translateY(-50%) rotate(35deg);
+  }
+  .screw.tl{ top:7px; left:7px; } .screw.tr{ top:7px; right:7px; }
+  .screw.bl{ bottom:7px; left:7px; } .screw.br{ bottom:7px; right:7px; }
+
+  /* ---------- brushed-steel panel surface ---------- */
+  .metal{
+    background:
+      repeating-linear-gradient(115deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 3px),
+      linear-gradient(180deg, var(--steel-hi), var(--steel-mid) 38%, var(--steel-low) 68%, var(--steel-dark));
+    border:1px solid #10161a;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -6px 12px rgba(0,0,0,0.35), 0 6px 18px rgba(0,0,0,0.5);
+  }
+
+  /* ---------- LCD readout screen ---------- */
+  .lcd{
+    background: radial-gradient(ellipse at 50% 0%, #04200f, var(--lcd-bg) 70%);
+    border:2px solid #0d1a10; border-radius:6px; position:relative; overflow:hidden;
+    box-shadow: inset 0 0 22px rgba(0,0,0,0.85), inset 0 0 40px rgba(140,255,58,0.08), 0 0 0 4px #1a231b, 0 6px 16px rgba(0,0,0,0.6);
+  }
+  .lcd::before{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background: repeating-linear-gradient(to bottom, rgba(140,255,58,0.05) 0 1px, transparent 1px 3px);
+  }
+
+  /* ---------- equalizer visualizer bars ---------- */
+  .eq{ display:flex; align-items:flex-end; gap:5px; height:34px; }
+  .eq span{
+    width:5px; border-radius:1px;
+    background: linear-gradient(180deg, #d9ffc4, var(--neon) 40%, var(--neon-dim));
+    box-shadow: 0 0 6px var(--neon-glow);
+    animation: eqBounce 1.1s ease-in-out infinite;
+    transform-origin:bottom;
+  }
+  .eq span:nth-child(1){ height:40%; animation-delay:-0.9s; }
+  .eq span:nth-child(2){ height:80%; animation-delay:-0.4s; }
+  .eq span:nth-child(3){ height:55%; animation-delay:-1.1s; }
+  .eq span:nth-child(4){ height:95%; animation-delay:-0.2s; }
+  .eq span:nth-child(5){ height:65%; animation-delay:-0.7s; }
+  .eq span:nth-child(6){ height:35%; animation-delay:-1.3s; }
+  .eq span:nth-child(7){ height:75%; animation-delay:-0.5s; }
+  .eq span:nth-child(8){ height:50%; animation-delay:-1.0s; }
+  @keyframes eqBounce{
+    0%,100%{ transform:scaleY(0.35); } 50%{ transform:scaleY(1); }
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    background: var(--void-bg);
+    color: var(--chrome-1);
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.5;
+    overflow-x:hidden;
+    min-height:100vh;
+  }
+
+  ::selection{ background: var(--neon); color:#04150a; }
+
+  a{ color:inherit; text-decoration:none; }
+
+  /* ---------- scanline / vignette atmosphere, fixed over everything ---------- */
+  .atmosphere{
+    position:fixed; inset:0; pointer-events:none; z-index:40; mix-blend-mode:screen;
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        rgba(140,255,58,0.035) 0px,
+        rgba(140,255,58,0.035) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+    opacity:.5;
+  }
+  .vignette{
+    position:fixed; inset:0; pointer-events:none; z-index:39;
+    background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,0.75) 100%);
+  }
+
+  /* ===========================================================
+     BOOT SEQUENCE
+     =========================================================== */
+  #boot{
+    position:fixed; inset:0; z-index:100; background:#020402;
+    display:flex; align-items:center; justify-content:center; flex-direction:column;
+    gap:14px;
+    animation: bootOut .6s ease 1.9s forwards;
+  }
+  #boot .orb{
+    width:64px; height:64px; border-radius:50%;
+    border:2px solid var(--neon);
+    box-shadow: 0 0 20px var(--neon-glow), inset 0 0 20px var(--neon-glow);
+    animation: pulse 1s ease-in-out infinite;
+  }
+  #boot p{
+    font-family: var(--font-mono);
+    color: var(--neon);
+    letter-spacing: .3em;
+    font-size: 12px;
+    text-transform:uppercase;
+    animation: flicker 1.4s linear infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ transform:scale(1); opacity:1; }
+    50%{ transform:scale(1.15); opacity:.7; }
+  }
+  @keyframes flicker{
+    0%,100%{opacity:1;} 45%{opacity:.4;} 50%{opacity:1;} 82%{opacity:.6;}
+  }
+  @keyframes bootOut{
+    to{ opacity:0; visibility:hidden; }
+  }
+
+  /* ===========================================================
+     BLADE NAVIGATION (Xbox-dashboard inspired signature element)
+     =========================================================== */
+  nav.blades{
+    position:fixed; top:0; left:0; height:100vh; width:72px; z-index:50;
+    display:flex; flex-direction:column; padding:16px 0; gap:8px;
+    background:
+      repeating-linear-gradient(100deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 3px),
+      linear-gradient(90deg, var(--steel-dark), var(--steel-low) 12%, var(--steel-dark) 100%);
+    border-right:2px solid #05070600;
+    box-shadow: inset -6px 0 16px rgba(0,0,0,0.5), 4px 0 20px rgba(0,0,0,0.5);
+    transition: width .35s cubic-bezier(.4,0,.2,1);
+  }
+  nav.blades:hover{ width:220px; }
+  nav.blades .blade{
+    margin:0 10px; border-radius:8px; position:relative; display:flex; align-items:center;
+    overflow:hidden; cursor:pointer; min-height:52px;
+    background: linear-gradient(180deg, #3a4448, #1a2124 55%, #101517);
+    border:1px solid #060a0b;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -3px 6px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.4);
+    transition: box-shadow .3s ease;
+  }
+  nav.blades .blade::before{
+    content:''; position:absolute; inset:0;
+    background: linear-gradient(90deg, rgba(140,255,58,0.35), transparent 75%);
+    opacity:0; transform:translateX(-100%);
+    transition: transform .4s ease, opacity .4s ease;
+  }
+  nav.blades .blade:hover, nav.blades .blade.active{
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -3px 6px rgba(0,0,0,0.5), 0 0 16px var(--neon-glow);
+  }
+  nav.blades .blade:hover::before, nav.blades .blade.active::before{
+    opacity:.7; transform:translateX(0);
+  }
+  nav.blades .blade .tick{
+    width:70px; min-width:70px; text-align:center;
+    font-family: var(--font-mono); font-size:10px; letter-spacing:.15em;
+    color: var(--chrome-2); z-index:2;
+    writing-mode: vertical-rl; text-orientation:mixed;
+  }
+  nav.blades .blade:hover .tick, nav.blades .blade.active .tick{ color: var(--neon); text-shadow:0 0 8px var(--neon-glow); }
+  nav.blades .blade .label{
+    font-family: var(--font-display); font-size:12px; letter-spacing:.08em;
+    color: var(--chrome-1); white-space:nowrap; opacity:0;
+    transform:translateX(-8px);
+    transition: opacity .3s ease .05s, transform .3s ease .05s;
+    z-index:2;
+  }
+  nav.blades:hover .blade .label{ opacity:1; transform:translateX(0); }
+  nav.blades .bolt-row{ display:flex; justify-content:center; gap:6px; padding:6px 0; }
+  nav.blades .bolt-row .screw{ position:static; }
+
+  main{ margin-left:64px; }
+
+  /* ===========================================================
+     HERO
+     =========================================================== */
+  .hero{
+    min-height:100vh; position:relative;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:40px 24px;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 30%, rgba(140,255,58,0.14), transparent 70%),
+      var(--void-bg);
+    overflow:hidden;
+  }
+  .hero::after{
+    content:''; position:absolute; inset:0;
+    background: repeating-radial-gradient(circle at 50% 20%, transparent 0 40px, rgba(140,255,58,0.02) 41px);
+    pointer-events:none;
+  }
+  .hero .orb-mark{
+    width:130px; height:130px; border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, #d9ffc4, var(--neon) 40%, var(--neon-dim) 75%, #06110a 100%);
+    box-shadow: 0 0 60px var(--neon-glow), 0 0 140px rgba(140,255,58,0.25);
+    margin-bottom:28px;
+    position:relative;
+    animation: orbFloat 6s ease-in-out infinite;
+  }
+  .hero .orb-mark::before{
+    content:'X'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-weight:900; font-size:52px; color:#04150a;
+    text-shadow: 0 1px 0 rgba(255,255,255,.3);
+  }
+  @keyframes orbFloat{
+    0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-10px); }
+  }
+  .hero h1{
+    font-family: var(--font-display);
+    font-weight:900;
+    font-size: clamp(2.4rem, 7vw, 5.5rem);
+    letter-spacing:.02em;
+    line-height:1;
+    background: linear-gradient(180deg, #ffffff 0%, var(--chrome-1) 35%, var(--chrome-2) 55%, var(--chrome-1) 70%, #ffffff 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow: 0 0 40px rgba(140,255,58,0.25);
+    margin-bottom:14px;
+  }
+  .hero .tagline{
+    font-family: var(--font-mono);
+    color: var(--neon);
+    letter-spacing:.35em; font-size:12px; text-transform:uppercase;
+    margin-bottom: 30px;
+  }
+  .hero .sub{
+    max-width:560px; color: var(--chrome-2); font-size:1.15rem; font-weight:500;
+    margin-bottom:38px;
+  }
+  .hero .sub b{ color:var(--chrome-1); font-weight:600; }
+
+  .btn-row{ display:flex; gap:16px; flex-wrap:wrap; justify-content:center; }
+  .btn{
+    font-family: var(--font-display); font-size:12px; letter-spacing:.08em;
+    padding:14px 30px; border-radius:24px; text-transform:uppercase;
+    border:1px solid #0a0f0a;
+    background: linear-gradient(180deg, #eafcd8 0%, #a6e56b 12%, var(--neon) 30%, var(--neon-dim) 78%, #1c3a0d 100%);
+    color: #0a1a06;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -4px 6px rgba(0,0,0,0.35), 0 3px 8px rgba(0,0,0,0.5);
+    transition: box-shadow .25s ease, transform .2s ease;
+    cursor:pointer;
+  }
+  .btn:hover{
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -4px 6px rgba(0,0,0,0.35), 0 0 22px var(--neon-glow);
+    transform: translateY(-2px);
+  }
+  .btn.ghost{
+    background: linear-gradient(180deg, #e9eefc 0%, #b7c4e8 12%, var(--coolchrome) 30%, #4c5f99 78%, #131a2e 100%);
+    color:#0a1024; border-color:#05070f;
+  }
+  .btn.ghost:hover{ box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), inset 0 -4px 6px rgba(0,0,0,0.35), 0 0 20px rgba(157,184,255,0.5); }
+
+  /* ---------- LCD "now playing" readout module ---------- */
+  .player-module{
+    margin-top:50px; width:100%; max-width:640px; padding:18px 20px 16px;
+    display:flex; align-items:center; gap:18px;
+  }
+  .player-module .eq{ flex-shrink:0; }
+  .player-module .screen{ flex:1; text-align:left; overflow:hidden; }
+  .player-module .now{
+    font-family:var(--font-mono); font-size:10px; letter-spacing:.2em; color:var(--neon);
+    opacity:.75; margin-bottom:4px; text-transform:uppercase;
+  }
+  /* marquee ticker (lives inside the LCD screen) */
+  .ticker{ width:100%; overflow:hidden; }
+  .ticker span{
+    display:inline-block; white-space:nowrap; font-family:var(--font-mono);
+    color:var(--neon); text-shadow:0 0 6px var(--neon-glow); font-size:13px; letter-spacing:.05em;
+    animation: scrollTicker 18s linear infinite;
+  }
+  @keyframes scrollTicker{
+    0%{ transform:translateX(100%); } 100%{ transform:translateX(-100%); }
+  }
+
+  /* ===========================================================
+     SECTION SHELL
+     =========================================================== */
+  section{ padding: 110px 8vw; position:relative; }
+  .section-head{ margin-bottom:52px; }
+  .eyebrow{
+    font-family:var(--font-mono); color:var(--neon); font-size:12px;
+    letter-spacing:.3em; text-transform:uppercase; display:block; margin-bottom:10px;
+  }
+  h2.title{
+    font-family:var(--font-display); font-weight:700; font-size:clamp(1.8rem,4vw,3rem);
+    color:var(--chrome-1);
+  }
+  .section-sub{ color:var(--chrome-2); max-width:520px; margin-top:12px; font-size:1.05rem; }
+
+  /* divider */
+  .div-line{
+    height:1px; width:100%;
+    background: linear-gradient(90deg, transparent, var(--neon-dim) 20%, var(--neon) 50%, var(--neon-dim) 80%, transparent);
+    opacity:.5; margin: 0 0 90px 0;
+  }
+
+  /* ---------- PROJECTS ---------- */
+  .grid-projects{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:24px;
+  }
+  .card{
+    background: linear-gradient(160deg, var(--void-3), var(--void-2));
+    border:1px solid rgba(140,255,58,0.18);
+    border-radius:10px; padding:26px 26px 22px; position:relative; overflow:hidden;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 14px rgba(0,0,0,0.4);
+    transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  }
+  .card::before{
+    content:''; position:absolute; top:-1px; left:-1px; right:-1px; height:2px;
+    background: linear-gradient(90deg, transparent, var(--neon), transparent);
+    opacity:0; transition:opacity .3s ease;
+  }
+  .card:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.5), 0 0 24px rgba(140,255,58,0.18);
+    border-color: rgba(140,255,58,0.5);
+  }
+  .card:hover::before{ opacity:1; }
+  .card .tag{
+    font-family:var(--font-mono); font-size:10px; color:var(--neon); letter-spacing:.15em;
+    text-transform:uppercase; margin-bottom:12px; display:inline-block;
+  }
+  .card h3{
+    font-family:var(--font-display); font-size:1.15rem; color:var(--chrome-1); margin-bottom:10px;
+  }
+  .card p{ color:var(--chrome-2); font-size:.98rem; margin-bottom:18px; }
+  .card .link{
+    font-family:var(--font-mono); font-size:12px; color:var(--coolchrome);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .card .link::after{ content:'→'; transition:transform .2s ease; }
+  .card:hover .link::after{ transform:translateX(4px); }
+
+  /* ---------- VIDEOS (chrome playlist tiles) ---------- */
+  .grid-videos{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:22px;
+    padding:16px; border-radius:12px; position:relative;
+  }
+  .video-tile{
+    aspect-ratio:16/10; border-radius:8px; position:relative;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; overflow:hidden;
+  }
+  .video-tile .play{
+    width:56px; height:56px; border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, #d9ffc4, var(--neon) 45%, var(--neon-dim) 100%);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 0 20px var(--neon-glow), inset 0 1px 2px rgba(255,255,255,0.6);
+    transition: transform .25s ease; z-index:2;
+  }
+  .video-tile .play::after{
+    content:''; border-style:solid; border-width:9px 0 9px 15px;
+    border-color:transparent transparent transparent #0a1a06; margin-left:4px;
+  }
+  .video-tile:hover .play{ transform:scale(1.15); }
+  .video-tile .vlabel{
+    position:absolute; bottom:12px; left:14px; font-family:var(--font-mono); z-index:2;
+    font-size:11px; color:var(--neon); text-shadow:0 0 6px var(--neon-glow); letter-spacing:.1em;
+  }
+
+  /* ---------- BLOG (chrome playlist panel) ---------- */
+  .blog-list{
+    display:flex; flex-direction:column; padding:10px; border-radius:12px; position:relative;
+  }
+  .blog-entry{
+    display:grid; grid-template-columns:90px 1fr; gap:24px; align-items:start;
+    padding:22px 18px; border-radius:6px; margin-bottom:4px;
+    background: linear-gradient(180deg, rgba(140,255,58,0.03), transparent);
+    border-bottom:1px solid rgba(140,255,58,0.1);
+    transition: background .2s ease;
+  }
+  .blog-entry:hover{ background: rgba(140,255,58,0.07); }
+  .blog-entry .date{
+    font-family:var(--font-mono); color:var(--neon); font-size:12px; letter-spacing:.05em;
+    text-shadow:0 0 6px var(--neon-glow);
+  }
+  .blog-entry h3{
+    font-family:var(--font-display); font-size:1.05rem; color:var(--chrome-1); margin-bottom:8px;
+  }
+  .blog-entry p{ color:var(--chrome-2); }
+  .blog-entry .link{
+    font-family:var(--font-mono); font-size:12px; color:var(--coolchrome); display:inline-block; margin-top:10px;
+  }
+
+  /* ---------- GUESTBOOK / FOOTER ---------- */
+  footer{
+    padding:90px 8vw 50px; border-top:1px solid rgba(140,255,58,0.15);
+    background: linear-gradient(180deg, transparent, rgba(140,255,58,0.03));
+  }
+  .guest-form{
+    display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; margin-bottom:34px;
+  }
+  .guest-form input, .guest-form textarea{
+    font-family:var(--font-mono); background:var(--lcd-bg); border:1px solid rgba(140,255,58,0.3);
+    border-radius:6px; padding:12px 14px; color:var(--neon); font-size:.9rem; flex:1; min-width:180px;
+    box-shadow: inset 0 0 12px rgba(0,0,0,0.7);
+  }
+  .guest-form input::placeholder, .guest-form textarea::placeholder{ color:var(--neon-dim); }
+  .guest-form input:focus, .guest-form textarea:focus{ outline:2px solid var(--neon); }
+  .guest-form textarea{ width:100%; min-height:70px; resize:vertical; }
+  #guestbookEntries{ display:flex; flex-direction:column; gap:14px; margin-bottom:40px; }
+  .guest-entry{
+    border-left:3px solid var(--neon); padding:10px 16px; background:var(--void-2); border-radius:0 6px 6px 0;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .guest-entry .who{ font-family:var(--font-mono); color:var(--neon); font-size:12px; margin-bottom:4px; text-shadow:0 0 6px var(--neon-glow); }
+  .guest-entry .msg{ color:var(--chrome-2); font-size:.95rem; }
+
+  .footer-bottom{
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:20px;
+    padding-top:30px; border-top:1px solid rgba(140,255,58,0.1);
+  }
+  .counter{
+    font-family:var(--font-mono); font-size:12px; color:var(--chrome-2); display:flex; align-items:center; gap:8px;
+  }
+  .counter .digits{
+    background:#000; color:var(--neon); padding:4px 8px; border-radius:3px; letter-spacing:.15em;
+    border:1px solid rgba(140,255,58,0.4); box-shadow: inset 0 0 8px rgba(140,255,58,0.3);
+    text-shadow:0 0 6px var(--neon-glow);
+  }
+  .made-with{ font-family:var(--font-mono); font-size:11px; color:var(--chrome-2); letter-spacing:.1em; }
+
+  @media (max-width: 720px){
+    nav.blades{ display:none; }
+    main{ margin-left:0; }
+    .blog-entry{ grid-template-columns:1fr; gap:6px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+
+  /* ---------- floating music power button ---------- */
+  .audio-toggle{
+    position:fixed; bottom:22px; right:22px; z-index:60;
+    width:52px; height:52px; border-radius:50%; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid #05070600;
+  }
+  .audio-toggle .power-dot{
+    width:14px; height:14px; border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, #445048, #1a2118 70%);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.6);
+    transition: background .3s ease, box-shadow .3s ease;
+  }
+  .audio-toggle.playing .power-dot{
+    background: radial-gradient(circle at 35% 30%, #d9ffc4, var(--neon) 60%, var(--neon-dim));
+    box-shadow: 0 0 14px var(--neon-glow), inset 0 1px 1px rgba(255,255,255,0.6);
+  }
+  .audio-toggle:hover{ box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -6px 12px rgba(0,0,0,0.35), 0 0 16px var(--neon-glow); }
+</style>
+</head>
+<body>
+
+<div id="boot">
+  <div class="orb"></div>
+  <p>booting personal heaven…</p>
+</div>
+
+<div class="atmosphere"></div>
+<div class="vignette"></div>
+
+<!-- ===========================================================
+     EDIT ME: put your own legally-owned mp3 in the "music" folder
+     next to this index.html, named exactly ready-steady-go.mp3
+     (or change the filename below to match yours).
+     =========================================================== -->
+<audio id="bgm" src="music/ready-steady-go.mp3" loop preload="auto"></audio>
+
+<button id="audioToggle" class="audio-toggle metal" aria-label="Toggle music">
+  <span class="power-dot"></span>
+</button>
+
+<!-- =========================================================
+     EDIT ME: change the labels below to match your sections
+     ========================================================= -->
+<nav class="blades" aria-label="Main navigation">
+  <div class="bolt-row"><span class="screw"></span><span class="screw"></span></div>
+  <a href="#home" class="blade active"><span class="tick">HOME</span><span class="label">HOME</span></a>
+  <a href="#projects" class="blade"><span class="tick">PROJECTS</span><span class="label">PROJECTS</span></a>
+  <a href="#videos" class="blade"><span class="tick">VIDEOS</span><span class="label">VIDEOS</span></a>
+  <a href="#blog" class="blade"><span class="tick">BLOG</span><span class="label">BLOG</span></a>
+  <a href="#guestbook" class="blade"><span class="tick">GUESTBOOK</span><span class="label">GUESTBOOK</span></a>
+  <div class="bolt-row"><span class="screw"></span><span class="screw"></span></div>
+</nav>
+
+<main>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero" id="home">
+    <div class="orb-mark"></div>
+    <!-- EDIT ME: your name / handle -->
+    <h1>BERKAY LAK</h1>
+    <p class="tagline">OUTER HEAVEN - NO INFORMATION GIVEN AS WELL AS NO F#CKS :: est. 2026</p>
+    <p class="sub">Welcome to my corner of the internet. This is where I dump <b>projects</b>, <b>videos</b>, and whatever I'm thinking about lately. No algorithm, no ads. — just my stuff.</p>
+    <div class="btn-row">
+      <a href="#projects" class="btn">Enter Site</a>
+      <a href="#guestbook" class="btn ghost">Sign Guestbook</a>
+    </div>
+    <div class="player-module metal" style="border-radius:14px;">
+      <span class="screw tl"></span><span class="screw tr"></span>
+      <span class="screw bl"></span><span class="screw br"></span>
+      <div class="eq"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="screen lcd" style="padding:12px 16px;">
+        <div class="now" id="nowLabel">ready steady go</div>
+        <!-- EDIT ME: change this scrolling message -->
+        <div class="ticker"><span>✦ WELCOME TO MY PERSONAL HEAVEN ✦ CURRENTLY OBSESSED WITH: (fill this in) ✦ LAST UPDATED: AUGUST 2026 ✦ BEST VIEWED WITH THE VIBES ON ✦</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROJECTS ===================== -->
+  <section id="projects">
+    <div class="section-head">
+      <span class="eyebrow">// 01 — the work</span>
+      <h2 class="title">Projects</h2>
+      <p class="section-sub">Things I've built, designed, or broken and fixed again.</p>
+    </div>
+    <div class="div-line"></div>
+    <div class="grid-projects metal" style="padding:24px; border-radius:12px; position:relative;">
+      <span class="screw tl"></span><span class="screw tr"></span>
+      <span class="screw bl"></span><span class="screw br"></span>
+      <!-- EDIT ME: duplicate this .card block for each project -->
+      <div class="card">
+        <span class="tag">Web</span>
+        <h3>Project Name One</h3>
+        <p>Short one-line description of what this project is and why you made it.</p>
+        <a href="#" class="link">View project</a>
+      </div>
+      <div class="card">
+        <span class="tag">Design</span>
+        <h3>Project Name Two</h3>
+        <p>Short one-line description of what this project is and why you made it.</p>
+        <a href="#" class="link">View project</a>
+      </div>
+      <div class="card">
+        <span class="tag">Misc</span>
+        <h3>Project Name Three</h3>
+        <p>Short one-line description of what this project is and why you made it.</p>
+        <a href="#" class="link">View project</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== VIDEOS ===================== -->
+  <section id="videos">
+    <div class="section-head">
+      <span class="eyebrow">// 02 — watch</span>
+      <h2 class="title">Videos</h2>
+      <p class="section-sub">Fun stuff, edits, gameplay, whatever I felt like uploading.</p>
+    </div>
+    <div class="div-line"></div>
+    <div class="grid-videos metal">
+      <span class="screw tl"></span><span class="screw tr"></span>
+      <span class="screw bl"></span><span class="screw br"></span>
+      <!--
+        EDIT ME: replace each .video-tile with a real embed when you have links, e.g.:
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0" allowfullscreen></iframe>
+      -->
+      <div class="video-tile lcd"><div class="play"></div><span class="vlabel">video_01.mp4</span></div>
+      <div class="video-tile lcd"><div class="play"></div><span class="vlabel">video_02.mp4</span></div>
+      <div class="video-tile lcd"><div class="play"></div><span class="vlabel">video_03.mp4</span></div>
+    </div>
+  </section>
+
+  <!-- ===================== BLOG ===================== -->
+  <section id="blog">
+    <div class="section-head">
+      <span class="eyebrow">// 03 — log entries</span>
+      <h2 class="title">Blog</h2>
+      <p class="section-sub">Diary-style updates. Unfiltered, unedited, very me.</p>
+    </div>
+    <div class="div-line"></div>
+    <div class="blog-list metal lcd" style="border-radius:12px;">
+      <span class="screw tl"></span><span class="screw tr"></span>
+      <span class="screw bl"></span><span class="screw br"></span>
+      <!-- EDIT ME: duplicate this .blog-entry block for each post -->
+      <div class="blog-entry">
+        <div class="date">01<br>08.22.26</div>
+        <div>
+          <h3>First post title goes here</h3>
+          <p>This is where your blog entry text goes. Talk about your day, a project, a random thought — whatever this space is for.</p>
+          <a href="#" class="link">read more →</a>
+        </div>
+      </div>
+      <div class="blog-entry">
+        <div class="date">02<br>08.10.26</div>
+        <div>
+          <h3>Another entry title</h3>
+          <p>Second placeholder entry. Replace with your real posts as you write them.</p>
+          <a href="#" class="link">read more →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== GUESTBOOK / FOOTER ===================== -->
+  <footer id="guestbook">
+    <span class="eyebrow">// 04 — leave a trace</span>
+    <h2 class="title">Guestbook</h2>
+    <p class="section-sub">Say hi. Messages are saved on this device only (see note in code).</p>
+
+    <form class="guest-form" id="guestForm">
+      <input type="text" id="guestName" placeholder="your name" required>
+      <textarea id="guestMsg" placeholder="leave a message..." required></textarea>
+      <button type="submit" class="btn" style="min-width:140px;">Sign</button>
+    </form>
+
+    <div id="guestbookEntries"></div>
+
+    <div class="footer-bottom">
+      <div class="counter">VISITORS: <span class="digits" id="visitorCount">000001</span></div>
+      <div class="made-with">HANDCRAFTED IN HTML :: PERSONAL HEAVEN © 2026</div>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  // Boot sequence removal after animation
+  setTimeout(()=>{ const b=document.getElementById('boot'); if(b) b.style.display='none'; }, 2600);
+
+  // Blade nav active state on click
+  document.querySelectorAll('nav.blades .blade').forEach(b=>{
+    b.addEventListener('click', ()=>{
+      document.querySelectorAll('nav.blades .blade').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+    });
+  });
+
+  // Visitor counter — stored in this browser only via localStorage
+  (function(){
+    const el = document.getElementById('visitorCount');
+    let count = parseInt(localStorage.getItem('ph_visits') || '0', 10);
+    count += 1;
+    localStorage.setItem('ph_visits', count);
+    el.textContent = String(count).padStart(6,'0');
+  })();
+
+  // Guestbook — stored in this browser only via localStorage
+  (function(){
+    const form = document.getElementById('guestForm');
+    const list = document.getElementById('guestbookEntries');
+
+    function render(){
+      const entries = JSON.parse(localStorage.getItem('ph_guestbook') || '[]');
+      list.innerHTML = '';
+      entries.slice().reverse().forEach(e=>{
+        const div = document.createElement('div');
+        div.className = 'guest-entry';
+        div.innerHTML = `<div class="who">${e.name}</div><div class="msg">${e.msg}</div>`;
+        list.appendChild(div);
+      });
+    }
+
+    form.addEventListener('submit', (ev)=>{
+      ev.preventDefault();
+      const name = document.getElementById('guestName').value.trim();
+      const msg = document.getElementById('guestMsg').value.trim();
+      if(!name || !msg) return;
+      const entries = JSON.parse(localStorage.getItem('ph_guestbook') || '[]');
+      entries.push({name, msg});
+      localStorage.setItem('ph_guestbook', JSON.stringify(entries));
+      form.reset();
+      render();
+    });
+
+    render();
+  })();
+
+  // Background music: browsers block true autoplay-with-sound, so we try,
+  // and if blocked, start on the very first click/tap anywhere on the page —
+  // classic "click to enter" behavior from 2000s sites.
+  (function(){
+    const audio = document.getElementById('bgm');
+    const toggle = document.getElementById('audioToggle');
+    const nowLabel = document.querySelector('.player-module .now');
+    let started = false;
+
+    const TRACK_NAME = 'ready steady go';
+
+    function setPlayingUI(isPlaying){
+      toggle.classList.toggle('playing', isPlaying);
+      if(nowLabel) nowLabel.textContent = isPlaying ? TRACK_NAME + ' — playing' : TRACK_NAME + ' — tap the dot ►';
+    }
+
+    function tryStart(){
+      if(started) return;
+      audio.play().then(()=>{
+        started = true;
+        setPlayingUI(true);
+        document.removeEventListener('click', tryStart);
+      }).catch(()=>{ /* still blocked, wait for a real click */ });
+    }
+
+    tryStart();
+    document.addEventListener('click', tryStart);
+
+    toggle.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      if(audio.paused){
+        audio.play().then(()=>{ started = true; setPlayingUI(true); });
+      } else {
+        audio.pause();
+        setPlayingUI(false);
+      }
+    });
+
+    setPlayingUI(false);
+  })();
+</script>
+
+</body>
+</html>

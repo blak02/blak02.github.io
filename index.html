@@ -499,6 +499,40 @@
     box-shadow: 0 0 14px var(--neon-glow), inset 0 1px 1px rgba(255,255,255,0.6);
   }
   .audio-toggle:hover{ box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -6px 12px rgba(0,0,0,0.35), 0 0 16px var(--neon-glow); }
+.hero-logo{
+    width: 230px;
+    height: 230px;
+    object-fit: cover;
+    border-radius: 50%;
+
+    margin-bottom: 28px;
+
+    position: relative;
+    z-index: 2;
+
+    filter:
+        drop-shadow(0 0 12px rgba(140,255,58,0.65))
+        drop-shadow(0 0 35px rgba(140,255,58,0.30));
+
+    animation: orbFloat 6s ease-in-out infinite;
+
+    transition: transform .3s ease, filter .3s ease;
+}
+
+.hero-logo:hover{
+    transform: scale(1.06);
+
+    filter:
+        drop-shadow(0 0 18px rgba(140,255,58,0.95))
+        drop-shadow(0 0 50px rgba(140,255,58,0.50));
+}
+
+@media (max-width: 720px){
+    .hero-logo{
+        width: 180px;
+        height: 180px;
+    }
+}
 </style>
 </head>
 <body>
@@ -539,7 +573,7 @@
 
   <!-- ===================== HERO ===================== -->
   <section class="hero" id="home">
-    <div class="orb-mark"></div>
+    <img src="logo-ejderha-web.png" class="hero-logo" alt="Berkay Lak Logo">
     <!-- EDIT ME: your name / handle -->
     <h1>BERKAY LAK</h1>
     <p class="tagline">OUTER HEAVEN - NO INFORMATION GIVEN AS WELL AS NO F#CKS :: est. 2026</p>
